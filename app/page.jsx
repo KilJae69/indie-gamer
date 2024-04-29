@@ -1,25 +1,47 @@
 import Link from "next/link";
 import Heading from "../components/Heading";
-import { getFeaturedReview } from "@/lib/reviews";
+import { getReviews } from "@/lib/reviews";
+import Image from "next/image";
+
+export const dynamic = "force-dynamic";
 
 
 export default async function HomePage() {
-
-  const featuredReview = await getFeaturedReview();
-  console.log(featuredReview);
+  const featuredReviews = await getReviews(3);
+  console.log("[HomePage] rendering",featuredReviews.map(review=>review.slug).join(", "));
 
   return (
     <>
       <Heading>Indie Gamer</Heading>
       <p className="pb-3">Only the best indie games, reviewed for you.</p>
-      <div className="border w-80 bg-white rounded sm:w-full shadow hover:shadow-xl">
-        <Link
-        className="flex flex-col sm:flex-row"
-         href={`/reviews/${featuredReview.slug}`}>
-        <img src={`/images/${featuredReview.slug}.jpg`} width={320} height={180} alt={featuredReview.title} className="rounded-t sm:rounded-l block sm:rounded-t-none" />
-        <h2 className="py-1 text-center font-orbitron font-semibold sm:px-2">{featuredReview.title}</h2>
-        </Link> 
-      </div>
+      <ul className="flex flex-col gap-2">
+        {featuredReviews.map((review, index) => (
+          <li
+            className="border w-80 bg-white rounded sm:w-full shadow hover:shadow-xl"
+            key={review.slug}
+          >
+            <Link
+              className="flex flex-col sm:flex-row"
+              href={`/reviews/${review.slug}`}
+            >
+              <Image
+                priority={index === 0}
+                src={review.image}
+                width={320}
+                height={180}
+                alt={review.title}
+                className="rounded-t sm:rounded-l block sm:rounded-t-none"
+              />
+              <div className="px-2 py-1 text-center sm:text-left">
+                <h2 className=" font-orbitron font-semibold">
+                  {review.title}
+                </h2>
+                <p className="hidden mt-2 sm:block">{review.subtitle}</p>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }

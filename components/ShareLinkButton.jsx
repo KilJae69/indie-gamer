@@ -12,7 +12,7 @@ export default function ShareLinkButton() {
             setClicked(false);
         }, 2000);
     };
-console.log("ShareLinkButton rendered",clicked);
+
   return (
     <button onClick={handleClick} className="border px-2 py-1 rounded text-slate-500 text-sm hover:bg-orange-100 hover:text-slate-700">
         <LinkIcon className="h-4 w-4 inline-block -mt-1 mr-1" />
