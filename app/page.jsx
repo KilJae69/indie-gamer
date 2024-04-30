@@ -3,19 +3,18 @@ import Heading from "../components/Heading";
 import { getReviews } from "@/lib/reviews";
 import Image from "next/image";
 
-export const dynamic = "force-dynamic";
 
 
 export default async function HomePage() {
-  const featuredReviews = await getReviews(3);
-  console.log("[HomePage] rendering",featuredReviews.map(review=>review.slug).join(", "));
+  const {reviews} = await getReviews(3);
+  console.log("[HomePage] rendering",reviews.map(review=>review.slug).join(", "));
 
   return (
     <>
       <Heading>Indie Gamer</Heading>
       <p className="pb-3">Only the best indie games, reviewed for you.</p>
       <ul className="flex flex-col gap-2">
-        {featuredReviews.map((review, index) => (
+        {reviews.map((review, index) => (
           <li
             className="border w-80 bg-white rounded sm:w-full shadow hover:shadow-xl"
             key={review.slug}
