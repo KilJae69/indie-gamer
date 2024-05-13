@@ -1,18 +1,32 @@
-import Link from "next/link";
 
-export default function Navbar() {
+import NavLink from "./NavLink";
+import { getUserFromSessionToken } from "@/lib/auth";
+import SignOutButton from "./SignOutButton";
+
+export default async function Navbar() {
+  const user = await getUserFromSessionToken();
+  console.log("[Navbar] user:", user);
   return (
     <nav>
       <ul className="flex gap-2">
-        <li>
-          <Link href="/" className="font-orbitron  font-bold text-orange-800 hover:underline">Indie Gamer</Link>
+        <li className="font-orbitron  font-bold">
+          <NavLink href="/">Home</NavLink>
         </li>
         <li className="ml-auto">
-          <Link href="/reviews" className="text-orange-800 hover:underline">Reviews</Link>
+          <NavLink href="/reviews">Reviews</NavLink>
         </li>
         <li>
-          <Link href="/about" className="text-orange-800 hover:underline">About</Link>
+          <NavLink href="/about" prefetch={false}>
+            About
+          </NavLink>
         </li>
+        {user ? (
+          <SignOutButton />
+        ) : (
+          <li>
+            <NavLink href="/sign-in">Sign In</NavLink>
+          </li>
+        )}
       </ul>
     </nav>
   );
